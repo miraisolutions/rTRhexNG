@@ -23,6 +23,33 @@ ui <- function() {
       sidebarPanel(
         width = 3,
 
+        fluidRow(
+          column(
+            8,
+            sliderInput(
+              inputId = "n_poly",
+              label = "# polygon sides",
+              pre = "#sides=",
+              min = 3,
+              max = 24,
+              value = 6
+            )
+          ),
+          column(
+            4,
+            checkboxInput(
+              inputId = "circle",
+              label = "round",
+              value = FALSE
+            ),
+            checkboxInput(
+              inputId = "random",
+              label = "random",
+              value = FALSE
+            )
+          )
+        ),
+
         sliderInput(inputId = "n",
                     label = "# of elements per side",
                     pre = "N=",
@@ -30,14 +57,14 @@ ui <- function() {
                     max = 50,
                     value = 9),
 
-        sliderInput(inputId = "n_full_n",
+        sliderInput(inputId = "n_full_frac",
                     label = NULL, # "elements of full sequence",
                     pre = "n_full=",
-                    post = "xN",
+                    post = "xNx#sides",
                     min = 0,
-                    max = 6,
-                    step = 0.1,
-                    value = 5.3,
+                    max = 1,
+                    step = 0.02,
+                    value = 0.88,
                     animate = animationOptions(
                       interval = 200,
                       loop = FALSE
@@ -92,10 +119,6 @@ ui <- function() {
                     min = 0,
                     max = 1,
                     value = 0.1),
-
-        radioButtons(inputId = "poly_circle",
-                     label = NULL, inline = TRUE,
-                     choices = c("polygonal", "circular")),
 
         NULL
       ),
@@ -169,26 +192,47 @@ server <- function(input, output) {
     input$split_p > 0 && input$split_s > 0 && input$split_s <= input$split_p
   })
 
-  sq_cols_gb <- reactive({
-    cols <- rep(input$full_fill, len = 1000)
+  n_full <- reactive({
+    pmax(1L, ceiling(input$n * input$n_poly * input$n_full_frac))
+  })
+
+  length_full <- reactive({
+    pmax(
+      input$n_poly * input$n,
+      n_full(),
+      input$jump_size + input$n_jump,
+      input$jump_size + input$split_s + input$n_split * input$split_p
+    )
+  })
+
+  sq_cols_jump_split <- reactive({
+    cols <- rep(input$full_fill, len = length_full())
     if (input$jump_size > 0) {
       cols[1 + input$jump_size] <- input$jump_fill
     }
     if (split_ok()) {
-      cols[seq(input$jump_size + input$split_s, by = input$split_p, 1000)] <- input$split_fill
+      cols[seq(input$jump_size + input$split_s, by = input$split_p, length_full())] <- input$split_fill
     }
     cols
   })
 
+  sq_cols <- reactive(
+    if (input$random) {
+      function(x) hsv(x, 0.75, 1)
+    } else {
+      sq_cols_jump_split()
+    }
+  )
+
   stickR_args <- reactive({
     within(list(), {
       file <- tempfile("rTRNG-", fileext = ".svg")
+      n_poly <- input$n_poly
       n <- input$n
       jump_size <- input$jump_size
       split_p <- input$split_p # based on the jump
       split_s <- input$split_s # based on the jump
-      sq_cols <- sq_cols_gb()
-      # sq_cols <- function(x) hsv(x, 0.75, 1)
+      sq_cols <- sq_cols()
       full_col <- input$full_stroke
       jump_col <- input$jump_stroke
       split_col <- input$split_stroke
@@ -197,11 +241,11 @@ server <- function(input, output) {
       text_size <- input$text_size
       text_col <- input$text_col
       bg_col <- input$bg_col
-      n_full <- max(1L, ceiling(input$n * input$n_full_n))
+      n_full <- n_full()
       poly_pad <- input$poly_pad
       postprocess <- input$svg_postprocess
       text_font <- "GothamBook"
-      circle <- input$poly_circle == "circular"
+      circle <- input$circle
     })
   })
 
