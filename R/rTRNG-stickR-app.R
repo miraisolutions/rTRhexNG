@@ -186,6 +186,7 @@ ui <- function() {
 }
 
 # Define server logic----
+#' @importFrom grDevices hsv
 server <- function(input, output) {
 
   split_ok <- reactive({

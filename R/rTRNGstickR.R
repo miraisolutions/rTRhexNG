@@ -1,3 +1,6 @@
+#' @importFrom grDevices hsv
+#' @importFrom utils head
+#' @importFrom utils tail
 rTRNGstickR <- function(
   file = "rTRNG.svg",
   n_poly = 6,
@@ -485,8 +488,6 @@ viewBox="0 0 @w@ @h@">
         rTRNG_svg,
         if (guides) {
           c(
-            .sub('  <circle cx="@cx@" cy="@cy@" r="@r@" style="stroke:black; fill:@bg@; stroke-width:@size@"/>',
-                 cx = tl_x, cy = tl_y, r = sq_size*0.1, bg = "black", size = path_size/5),
             .sub('  <circle cx="@cx@" cy="@cy@" r="@r@" style="stroke:cyan; fill:@bg@; stroke-width:@size@"/>',
                  cx = poly_center$x, cy = poly_center$y, r = in_poly_inner_r, bg = "none", size = path_size/5),
             .sub('  <circle cx="@cx@" cy="@cy@" r="@r@" style="stroke:magenta; fill:@bg@; stroke-width:@size@"/>',
