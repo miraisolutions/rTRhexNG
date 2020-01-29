@@ -11,6 +11,9 @@ palette <- mesch_V2
 
 # Define UI for app
 ui <- function() {
+  .columnVerticalLayout <- function(width, ...) {
+    column(width, ...)
+  }
   fluidPage(
 
     # App title ----
@@ -123,6 +126,7 @@ ui <- function() {
         NULL
       ),
 
+
       # Main panel for displaying outputs ----
       mainPanel(
         width = 8,
@@ -130,53 +134,63 @@ ui <- function() {
         plotOutput(outputId = "myImage", height = 550),
 
         fluidRow(
+          .columnVerticalLayout(
+            2,
+            colourInput(inputId = "bg_col",
+                        label = "background/text",
+                        value = palette$bg),
+            colourInput(inputId = "text_col",
+                        label = NULL,
+                        value = palette$txt)
+          ),
+          .columnVerticalLayout(
+            2,
+            colourInput(inputId = "full_fill",
+                        label = "full",
+                        value = palette$full_fill),
+            colourInput(inputId = "full_stroke",
+                        label = NULL,
+                        value = palette$full_stroke)
+          ),
+          .columnVerticalLayout(
+            2,
+            colourInput(inputId = "jump_fill",
+                        label = "jump",
+                        value = palette$jump_fill),
+            colourInput(inputId = "jump_stroke",
+                        label = NULL,
+                        value = palette$jump_stroke)
+          ),
+          .columnVerticalLayout(
+            2,
+            colourInput(inputId = "split_fill",
+                        label = "split",
+                        value = palette$split_fill),
 
-          column(2,
-                 colourInput(inputId = "bg_col",
-                             label = "background/text",
-                             value = palette$bg)),
-          column(2,
-                 colourInput(inputId = "full_fill",
-                             label = "full",
-                             value = palette$full_fill)),
-          column(2,
-                 colourInput(inputId = "jump_fill",
-                             label = "jump",
-                             value = palette$jump_fill)),
-          column(2,
-                 colourInput(inputId = "split_fill",
-                             label = "split",
-                             value = palette$split_fill))
-
+            colourInput(inputId = "split_stroke",
+                        label = NULL,
+                        value = palette$split_stroke)
+          )
         ),
+
         fluidRow(
-          column(2,
-                 colourInput(inputId = "text_col",
-                             label = NULL,
-                             value = palette$txt)),
-          column(2,
-                 colourInput(inputId = "full_stroke",
-                             label = NULL,
-                             value = palette$full_stroke)),
-          column(2,
-                 colourInput(inputId = "jump_stroke",
-                             label = NULL,
-                             value = palette$jump_stroke)),
-          column(2,
-                 colourInput(inputId = "split_stroke",
-                             label = NULL,
-                             value = palette$split_stroke))
-
+          column(
+            12,
+            radioButtons("svg_postprocess", label = NULL, inline = TRUE,
+                         choices = c("as-is", "rsvg", "rsvg2", "inkscape", "inkscape-text2path"),
+                         selected = "rsvg2")
+          )
         ),
 
-        radioButtons("svg_postprocess", label = NULL, inline = TRUE,
-                     choices = c("as-is", "rsvg", "rsvg2", "inkscape", "inkscape-text2path"),
-                     selected = "rsvg2"),
-
-        downloadButton("save_png", "Save as PNG"),
-        downloadButton("save_svg", "Save as SVG"),
-        downloadButton("save_pdf", "Save as PDF"),
-        downloadButton("save_R", "Download R code"),
+        fluidRow(
+          column(
+            12,
+            downloadButton("save_png", "Save as PNG"),
+            downloadButton("save_svg", "Save as SVG"),
+            downloadButton("save_pdf", "Save as PDF"),
+            downloadButton("save_R", "Download R code")
+          )
+        ),
 
         NULL
 
