@@ -24,32 +24,30 @@ ui <- function() {
 
       # Sidebar panel for inputs ----
       sidebarPanel(
+        style = "overflow-y:scroll; max-height: 90vh; position:relative;",
         width = 3,
 
-        fluidRow(
-          column(
-            8,
-            sliderInput(
-              inputId = "n_poly",
-              label = "# polygon sides",
-              pre = "#sides=",
-              min = 3,
-              max = 24,
-              value = 6
-            )
+        shinyWidgets::dropdownButton(
+          label = "Extras",
+          tooltip = TRUE,
+          icon = icon("cog"), width = "100%", size = "sm",
+          sliderInput(
+            inputId = "n_poly",
+            label = "# polygon sides",
+            pre = "#sides=",
+            min = 3,
+            max = 24,
+            value = 6
           ),
-          column(
-            4,
-            checkboxInput(
-              inputId = "circle",
-              label = "round",
-              value = FALSE
-            ),
-            checkboxInput(
-              inputId = "random",
-              label = "random",
-              value = FALSE
-            )
+          shinyWidgets::materialSwitch(
+            inputId = "circle",
+            label = "round",
+            inline = TRUE
+          ),
+          numericInput(
+            inputId = "seed",
+            label = "random seed (!=0)",
+            value = 0
           )
         ),
 
@@ -232,7 +230,7 @@ server <- function(input, output) {
   })
 
   sq_cols <- reactive(
-    if (input$random) {
+    if (input$seed != 0) {
       function(x) hsv(x, 0.75, 1)
     } else {
       sq_cols_jump_split()
@@ -261,6 +259,7 @@ server <- function(input, output) {
       postprocess <- input$svg_postprocess
       text_font <- "GothamBook"
       circle <- input$circle
+      seed <- input$seed
     })
   })
 
