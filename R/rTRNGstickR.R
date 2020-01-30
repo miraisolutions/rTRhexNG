@@ -332,12 +332,12 @@ viewBox="0 0 @w@ @h@">
       if (is.function(sq_cols)) {
         rng$seed(seed)
         rng$jump(jump_size)
-        sq_cols(rTRNG::runif_trng(nrow(full_seq_sq) - jump_size, engine = rng))
+        sq_cols(rTRNG::runif_trng(n_jump + n_path_ext, engine = rng))
       } else {
-        tail(full_seq_sq$fill, -jump_size)
+        tail(sq_cols, -jump_size)
       }
     jump_seq_sq <- .df(
-      x = T_x + seq(0, by = sq_size, len = nrow(full_seq_sq) - jump_size),
+      x = T_x + seq(0, by = sq_size, len = length(jump_sq_cols)),
       y = T_y,
       fill = jump_sq_cols,
       stroke = bg_col,
