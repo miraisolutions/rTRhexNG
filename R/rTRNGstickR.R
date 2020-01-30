@@ -369,7 +369,11 @@ viewBox="0 0 @w@ @h@">
 
   full_jump_highlight_svg <-
     if (full_highlight_split_jump && do_jump) {
-      svg_squares_path(head(tail(full_seq_sq, -jump_size), n_jump + n_path_ext), jump_col)
+      full_jump_sq <-
+        tail(head(full_seq_sq, pmin(jump_size + n_jump, n_full) + n_path_ext), -jump_size)
+      if (nrow(full_jump_sq) > n_path_ext) {
+        svg_squares_path(full_jump_sq, jump_col)
+      }
     }
 
   full_split_highlight_svg <-
