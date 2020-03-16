@@ -35,7 +35,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Deploy to shinyapps.io
-        if: github.ref == 'refs/heads/feature/2-gh-actions-ci-cd'
+        if: github.ref == 'refs/heads/feature/2-gh-actions-ci-cd___'
         env:
           SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
           SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
