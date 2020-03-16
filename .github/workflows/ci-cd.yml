@@ -1,18 +1,30 @@
 on: [push, pull_request]
 
-name: R-CMD-check
+name: CI-CD
 
 jobs:
-  R-CMD-check:
+  CI-CD:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: r-lib/actions/setup-r@master
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "rcmdcheck"))
+          install.packages(c("remotes", "rcmdcheck", "rsconnect"))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
-      - name: Check
+      - name: R CMD check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
         shell: Rscript {0}
+      - name: Deploy to shinyapps.io
+        if: github.ref == 'refs/heads/master'
+        env:
+          SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
+          SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
+          SHINYAPPS_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
+        run: |
+          account_info <- lapply(paste0("SHINYAPPS_", c("ACCOUNT", "TOKEN", "SECRET")), Sys.getenv)
+          do.call(rsconnect::setAccountInfo, account_info)
+          rsconnect::deployApp(appName = "rTRhexNG")
+        shell: Rscript {0}
+
