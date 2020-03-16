@@ -17,7 +17,7 @@ jobs:
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
         shell: Rscript {0}
       - name: Deploy to shinyapps.io
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/feature/2-gh-actions-ci-cd'
         env:
           SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
           SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
