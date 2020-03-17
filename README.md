@@ -1,7 +1,7 @@
 # rTRhexNG: R-generated hexagon sticker for rTRNG
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.org/miraisolutions/rTRhexNG.svg?branch=master)](https://travis-ci.org/miraisolutions/rTRhexNG)
+[![R build status](https://github.com/miraisolutions/rTRhexNG/workflows/CI-CD/badge.svg)](https://github.com/miraisolutions/rTRhexNG/actions)
 <!-- badges: end -->
 
 <img src="man/figures/rTRhexNG.gif" width="25%" height="25%"/>
