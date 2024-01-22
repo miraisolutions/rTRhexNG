@@ -27,6 +27,6 @@ jobs:
           account_info <- lapply(paste0("SHINYAPPS_", c("ACCOUNT", "TOKEN", "SECRET")), Sys.getenv)
           do.call(rsconnect::setAccountInfo, account_info)
           app_files = c("app.R", "DESCRIPTION", "NAMESPACE", "R/", "inst/")
-          rsconnect::deployApp(appName = "rTRhexNG-test", appFiles = app_files)
+          rsconnect::deployApp(appName = "rTRhexNG-test", appFiles = app_files, forceUpdate = TRUE)
         shell: Rscript {0}
 
