@@ -9,44 +9,16 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - uses: r-lib/actions/setup-r@master
+      - uses: r-lib/actions/setup-r@v2
 
-      - name: Query dependencies
-        run: |
-          install.packages("remotes")
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), "depends.Rds", version = 2)
-        shell: Rscript {0}
-
-      - name: Cache R packages
-        uses: actions/cache@v1
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-${{ hashFiles('depends.Rds') }}
-          restore-keys: ${{ runner.os }}-r-
+          extra-packages: any::rcmdcheck,any::rsconnect
 
-      - name: Install system dependencies
-        env:
-          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
-        run: |
-          Rscript -e "remotes::install_github('r-hub/sysreqs')"
-          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
-          sudo -s eval "$sysreqs"
-          # rsconnect dependencies
-          sudo apt-get update && sudo apt-get install -y --no-install-recommends \
-            libxml2-dev libcurl4-openssl-dev
-
-      - name: Install dependencies
-        run: |
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran(c("rcmdcheck", "rsconnect"))
-        shell: Rscript {0}
-
-      - name: Check
-        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")
-        shell: Rscript {0}
+      - uses: r-lib/actions/check-r-package@v2
 
       - name: Deploy to shinyapps.io
-        if: github.ref == 'refs/heads/master'
+        if: true || github.ref == 'refs/heads/master'
         env:
           SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
           SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
@@ -54,6 +26,7 @@ jobs:
         run: |
           account_info <- lapply(paste0("SHINYAPPS_", c("ACCOUNT", "TOKEN", "SECRET")), Sys.getenv)
           do.call(rsconnect::setAccountInfo, account_info)
-          rsconnect::deployApp(appName = "rTRhexNG")
+          app_files = c("app.R", "DESCRIPTION", "NAMESPACE", "R/", "inst/")
+          rsconnect::deployApp(appName = "rTRhexNG-test", appFiles = app_files)
         shell: Rscript {0}
 
