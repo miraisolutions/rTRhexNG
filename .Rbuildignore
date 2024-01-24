@@ -1,5 +1,8 @@
-^rTRhexNG\.Rproj$
+^.*\.Rproj$
 ^\.Rproj\.user$
-^app\.R$
-^\.travis\.yml$
 ^\.github$
+^app\.R$
+^R/_disable_autoload\.R$
+^deploy$
+^rsconnect$
+^\.rscignore$
