@@ -37,7 +37,7 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
 
       - name: Deploy to Posit Connect Cloud
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        if: startsWith(github.ref, 'refs/heads/') || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
         env:
           CONNECT_CLOUD_CLIENT_ID: ${{ secrets.CONNECT_CLOUD_CLIENT_ID }}
           CONNECT_CLOUD_CLIENT_SECRET: ${{ secrets.CONNECT_CLOUD_CLIENT_SECRET }}
