@@ -10,5 +10,5 @@ if (!interactive()) {
 # Add here any additional files/directories the app needs
 app_files = c("app.R", "DESCRIPTION", "NAMESPACE", "R/", "inst/")
 rsconnect::deployApp(
-  appName = "rTRhexNG", appFiles = app_files, forceUpdate = TRUE
+  appName = "rTRhexNG-test", appFiles = app_files, forceUpdate = TRUE
 )
