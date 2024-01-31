@@ -176,7 +176,7 @@ ui <- function() {
             12,
             radioButtons("svg_postprocess", label = NULL, inline = TRUE,
                          choices = c("as-is", "rsvg", "rsvg2", "inkscape", "inkscape-text2path"),
-                         selected = "rsvg2")
+                         selected = "rsvg")
           )
         ),
 
