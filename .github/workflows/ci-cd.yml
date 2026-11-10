@@ -41,5 +41,5 @@ jobs:
         env:
           CONNECT_CLOUD_CLIENT_ID: ${{ secrets.CONNECT_CLOUD_CLIENT_ID }}
           CONNECT_CLOUD_CLIENT_SECRET: ${{ secrets.CONNECT_CLOUD_CLIENT_SECRET }}
-          CONNECT_CLOUD_ACCOUNT: ${{ secrets.CONNECT_CLOUD_ACCOUNT }}
+          CONNECT_CLOUD_ACCOUNT: ${{ vars.CONNECT_CLOUD_ACCOUNT }}
         run: Rscript deploy/deploy-shinyapps.R
