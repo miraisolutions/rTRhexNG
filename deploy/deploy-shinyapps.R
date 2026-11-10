@@ -1,10 +1,10 @@
 # deploy/deploy-shinyapps.R
 # usethis::use_build_ignore("deploy")
 if (!interactive()) {
-  rsconnect::setAccountInfo(
-    Sys.getenv("SHINYAPPS_ACCOUNT"),
-    Sys.getenv("SHINYAPPS_TOKEN"),
-    Sys.getenv("SHINYAPPS_SECRET")
+  rsconnect::connectCloudClientCredentials(
+    clientId = Sys.getenv("CONNECT_CLOUD_CLIENT_ID"),
+    clientSecret = Sys.getenv("CONNECT_CLOUD_CLIENT_SECRET"),
+    account = Sys.getenv("CONNECT_CLOUD_ACCOUNT")
   )
 }
 # Add here any additional files/directories the app needs
